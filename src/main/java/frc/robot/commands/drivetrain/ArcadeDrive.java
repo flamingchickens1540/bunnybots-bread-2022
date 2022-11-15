@@ -20,7 +20,6 @@ public class ArcadeDrive extends CommandBase{
 
     @Override
     public void execute() {
-        super.execute();
         setMotors();
     }
 }
