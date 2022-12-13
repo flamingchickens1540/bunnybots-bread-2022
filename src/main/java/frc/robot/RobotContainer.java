@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.Drivetrain;
+import frc.robot.commands.elevator.Elevator;
+import frc.robot.commands.elevator.ElevatorCommand;
 import frc.robot.commands.intake.Intake;
 import frc.robot.commands.intake.IntakeCommand;
 import edu.wpi.first.wpilibj.SPI;
@@ -30,6 +32,7 @@ public class RobotContainer {
   private final XboxController controller = new XboxController(0);
   private final Drivetrain drivetrain = new Drivetrain();
   private final Intake intake = new Intake();
+  private final Elevator elevator = new Elevator();
   private final PhotonCamera camera = new PhotonCamera("gloworm");
   private final AHRS navx = new AHRS(SPI.Port.kMXP);
 
@@ -37,6 +40,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     drivetrain.setDefaultCommand(new ArcadeDrive(controller, drivetrain));
+    elevator.setDefaultCommand(new ElevatorCommand(controller, elevator));
     configureButtonBindings();
   }
 

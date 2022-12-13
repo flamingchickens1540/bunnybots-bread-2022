@@ -14,7 +14,27 @@ package frc.robot;
  */
 public final class Constants {
 
+    public static final class DrivetrainConstants{
+        public static final int LEFT_FRONT = 1;
+        public static final int LEFT_BACK = 2;
+        public static final int RIGHT_FRONT = 3;
+        public static final int RIGHT_BACK = 4;
+    }
+
     public static final class IntakeConstants{
         public static final int VICTOR = 5;
     }
+
+    public static final class ElevatorConstants{
+        public static final int FALCON = 6;
+    }
+
+    public static final double ENCODER_TICKS_PER_METER = 49866;
+
+    public static final double KS_VOLTS = 0.650;
+    public static final double KV_VOLT_SECONDS_PER_METER = 2.81;
+    public static final double KA_VOLT_SECONDS_SQUARED_PER_METER = 0.224;
+    public static final double KP_DRIVE_VEL = 3.2925;
+
+    public static final double K_TRACKWIDTH_METERS = 0.6604;
 }
