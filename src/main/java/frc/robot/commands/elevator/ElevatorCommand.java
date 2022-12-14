@@ -13,9 +13,10 @@ public class ElevatorCommand extends CommandBase{
     }
 
 
-    public void setElevator() {
+    public void execute() {
         double up = controller.getRightTriggerAxis();
         double down = -controller.getLeftTriggerAxis();
         elevator.setPercent(up + down);
     }
+
 }

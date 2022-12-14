@@ -15,10 +15,14 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.drivetrain.Drivetrain;
+import frc.robot.commands.drivetrain.TankDrive;
 import frc.robot.commands.elevator.Elevator;
+import frc.robot.commands.elevator.ElevatorBottom;
 import frc.robot.commands.elevator.ElevatorCommand;
+import frc.robot.commands.elevator.ElevatorTop;
 import frc.robot.commands.intake.Intake;
 import frc.robot.commands.intake.IntakeCommand;
+import frc.robot.utils.FlamingPigeon2;
 import edu.wpi.first.wpilibj.SPI;
 
 /**
@@ -29,8 +33,10 @@ import edu.wpi.first.wpilibj.SPI;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final XboxController controller = new XboxController(0);
-  private final Drivetrain drivetrain = new Drivetrain();
+  private final FlamingPigeon2 pigeon = new FlamingPigeon2(7);
+  private final XboxController pilot = new XboxController(0);
+  private final XboxController copilot = new XboxController(1);
+  private final Drivetrain drivetrain = new Drivetrain(pigeon);
   private final Intake intake = new Intake();
   private final Elevator elevator = new Elevator();
   private final PhotonCamera camera = new PhotonCamera("gloworm");
@@ -39,8 +45,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
-    drivetrain.setDefaultCommand(new ArcadeDrive(controller, drivetrain));
-    elevator.setDefaultCommand(new ElevatorCommand(controller, elevator));
+    drivetrain.setDefaultCommand(new TankDrive(pilot, drivetrain));
+    elevator.setDefaultCommand(new ElevatorCommand(copilot, elevator));
     configureButtonBindings();
   }
 
@@ -51,8 +57,15 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(controller, XboxController.Button.kA.value)
-    .whileActiveOnce(new IntakeCommand(intake));
+    new JoystickButton(copilot, XboxController.Button.kA.value)
+    .whileActiveOnce(new IntakeCommand(intake, 0.6));
+    new JoystickButton(copilot, XboxController.Button.kB.value)
+    .whileActiveOnce(new IntakeCommand(intake, -0.49));
+    new JoystickButton(copilot, XboxController.Button.kX.value)
+    .whenPressed(new ElevatorBottom(elevator));
+    new JoystickButton(copilot, XboxController.Button.kY.value)
+    .whenPressed(new ElevatorTop(elevator));
+
   }
 
   /**

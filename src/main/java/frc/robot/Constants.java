@@ -22,7 +22,7 @@ public final class Constants {
     }
 
     public static final class IntakeConstants{
-        public static final int VICTOR = 5;
+        public static final int SPARK = 5;
     }
 
     public static final class ElevatorConstants{
