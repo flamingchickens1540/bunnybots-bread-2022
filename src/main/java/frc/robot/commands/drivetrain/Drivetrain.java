@@ -1,6 +1,7 @@
 package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,12 +21,14 @@ public class Drivetrain extends SubsystemBase{
     private final TalonFX leftBack = new TalonFX(Constants.DrivetrainConstants.LEFT_BACK);
     private final FlamingPigeon2 pigeon;
     private final DifferentialDriveOdometry odometry;
+    private boolean brakeTrue;
 
     public Drivetrain(FlamingPigeon2 pigeon){
         leftBack.follow(leftFront);
         rightBack.follow(rightFront);
         leftFront.setNeutralMode(NeutralMode.Brake);
         rightFront.setNeutralMode(NeutralMode.Brake);
+        brakeTrue = true;
         
         this.pigeon = pigeon;
         odometry = new DifferentialDriveOdometry(pigeon.getRotation2d());
@@ -61,10 +64,11 @@ public class Drivetrain extends SubsystemBase{
     }
 
     public void resetOdometry(Pose2d pose){
-        // navx.reset();
         leftFront.setSelectedSensorPosition(0);
         rightFront.setSelectedSensorPosition(0);
-        odometry.resetPosition(pose, pigeon.getRotation2d());
+        zeroHeading();
+        odometry.resetPosition(pose, new Rotation2d(-Math.PI/2));
+        // new Rotation2d()
     }
 
     public void zeroHeading(){
@@ -75,7 +79,7 @@ public class Drivetrain extends SubsystemBase{
         return leftFront.getSensorCollection();
     }
     public TalonFXSensorCollection getRightSensors(){
-        return leftFront.getSensorCollection();
+        return rightFront.getSensorCollection();
     }
 
     public void brakeOn(){
@@ -85,5 +89,15 @@ public class Drivetrain extends SubsystemBase{
     public void brakeOff(){
         leftFront.setNeutralMode(NeutralMode.Coast);
         rightFront.setNeutralMode(NeutralMode.Coast);
+    }
+
+    public void toggleBrake(){
+        brakeTrue = !brakeTrue;
+        leftFront.setNeutralMode(brakeTrue?NeutralMode.Brake:NeutralMode.Coast);
+        rightFront.setNeutralMode(brakeTrue?NeutralMode.Brake:NeutralMode.Coast);
+    }
+
+    public double getYaw(){
+        return pigeon.getYaw();
     }
 }

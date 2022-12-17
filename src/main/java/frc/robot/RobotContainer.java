@@ -12,16 +12,23 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.drivetrain.ArcadeDrive;
+import frc.robot.commands.drivetrain.AutoCommand;
+import frc.robot.commands.drivetrain.AutoCommandCamera;
+import frc.robot.commands.drivetrain.MoveABit;
 import frc.robot.commands.drivetrain.Drivetrain;
 import frc.robot.commands.drivetrain.TankDrive;
+import frc.robot.commands.elevator.Eject1PerZone;
 import frc.robot.commands.elevator.Elevator;
 import frc.robot.commands.elevator.ElevatorBottom;
 import frc.robot.commands.elevator.ElevatorCommand;
 import frc.robot.commands.elevator.ElevatorTop;
+import frc.robot.commands.intake.Eject;
 import frc.robot.commands.intake.Intake;
 import frc.robot.commands.intake.IntakeCommand;
+import frc.robot.utils.ChickenPhotonCamera;
 import frc.robot.utils.FlamingPigeon2;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -39,13 +46,17 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain(pigeon);
   private final Intake intake = new Intake();
   private final Elevator elevator = new Elevator();
-  private final PhotonCamera camera = new PhotonCamera("gloworm");
-  private final AHRS navx = new AHRS(SPI.Port.kMXP);
+  private final ChickenPhotonCamera camera = new ChickenPhotonCamera("Microsoft_LifeCam_HD-3000");
+
+  
+  private final AutoCommand autoCommand = new AutoCommand(drivetrain, intake, elevator);
+  private final AutoCommandCamera autoCommandCamera = new AutoCommandCamera(drivetrain, intake, elevator, camera) ;
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
-    drivetrain.setDefaultCommand(new TankDrive(pilot, drivetrain));
+    drivetrain.setDefaultCommand(new TankDrive(pilot, drivetrain, elevator));
     elevator.setDefaultCommand(new ElevatorCommand(copilot, elevator));
     configureButtonBindings();
   }
@@ -65,6 +76,14 @@ public class RobotContainer {
     .whenPressed(new ElevatorBottom(elevator));
     new JoystickButton(copilot, XboxController.Button.kY.value)
     .whenPressed(new ElevatorTop(elevator));
+    // new JoystickButton(copilot, XboxController.Button.kRightBumper.value)
+    // .whenPressed(new Eject(intake, 7, -0.5));
+    // new JoystickButton(copilot, XboxController.Button.kLeftBumper.value)
+    // .whenPressed(new MoveABit(drivetrain, 10, -0.2));
+    // new JoystickButton(pilot, XboxController.Button.kRightBumper.value)
+    // .whileActiveOnce(new Eject1PerZone(intake, elevator, drivetrain));
+    // new JoystickButton(pilot, XboxController.Button.kLeftBumper.value)
+    // .whenPressed(new InstantCommand(drivetrain::toggleBrake,drivetrain));
 
   }
 
@@ -76,6 +95,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
-    return null;
+    return autoCommand; 
   }
 }

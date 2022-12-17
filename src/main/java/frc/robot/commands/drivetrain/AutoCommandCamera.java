@@ -17,9 +17,10 @@ import frc.robot.Constants;
 import frc.robot.commands.elevator.Eject1PerZone;
 import frc.robot.commands.elevator.Elevator;
 import frc.robot.commands.intake.Intake;
+import frc.robot.utils.ChickenPhotonCamera;
 
- public class AutoCommand extends SequentialCommandGroup{
-    public AutoCommand(Drivetrain drivetrain, Intake intake, Elevator elevator){
+ public class AutoCommandCamera extends SequentialCommandGroup{
+    public AutoCommandCamera(Drivetrain drivetrain, Intake intake, Elevator elevator, ChickenPhotonCamera camera){
         addRequirements(drivetrain);
         addRequirements(intake);
         addRequirements(elevator);
@@ -69,6 +70,7 @@ import frc.robot.commands.intake.Intake;
             ramseteCommand,
             new InstantCommand(()-> drivetrain.setVolts(0, 0)),
             new WaitCommand(0.4),
+            new TurnToAprilTag(drivetrain, camera),
             new MoveABit(drivetrain, 10, 0.2),
             //  new InstantCommand(()-> SmartDashboard.putNumber("navx/endRotation", drivetrain.getPose().getRotation().getDegrees())),
             new Eject1PerZone(intake, elevator, drivetrain)

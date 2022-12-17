@@ -9,8 +9,9 @@ public class FlamingPigeon2 extends Pigeon2{
     public FlamingPigeon2(int deviceNumber) {
         super(deviceNumber);
     }
-
+   
     public Rotation2d getRotation2d(){
+        //TODO Change this to be positive yaw
         return Rotation2d.fromDegrees(-this.getYaw());
     }
     
