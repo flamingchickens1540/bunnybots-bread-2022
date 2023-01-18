@@ -24,8 +24,6 @@ import frc.robot.commands.intake.Intake;
         addRequirements(intake);
         addRequirements(elevator);
 
-        //  drivetrain.zeroHeading();
-
          
         //  Pose2d start = new Pose2d(0,0,new Rotation2d(0));
         //  Pose2d end = new Pose2d(3,0,new Rotation2d(180));
@@ -69,7 +67,7 @@ import frc.robot.commands.intake.Intake;
             ramseteCommand,
             new InstantCommand(()-> drivetrain.setVolts(0, 0)),
             new WaitCommand(0.4),
-            new MoveABit(drivetrain, 10, 0.2),
+            new MoveABit(drivetrain, 20, 0.2),
             //  new InstantCommand(()-> SmartDashboard.putNumber("navx/endRotation", drivetrain.getPose().getRotation().getDegrees())),
             new Eject1PerZone(intake, elevator, drivetrain)
         );

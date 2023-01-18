@@ -9,7 +9,7 @@ public class Intake extends SubsystemBase{
     CANSparkMax spark = new CANSparkMax(IntakeConstants.SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
     public Intake(){
         spark.setInverted(true);
-        spark.setSmartCurrentLimit(30);
+        spark.setSmartCurrentLimit(40);
     }
 
     public void setPercent(double percent){

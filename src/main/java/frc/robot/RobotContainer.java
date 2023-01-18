@@ -9,6 +9,7 @@ import com.kauailabs.navx.frc.AHRS;
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -48,7 +49,7 @@ public class RobotContainer {
   private final Elevator elevator = new Elevator();
   private final ChickenPhotonCamera camera = new ChickenPhotonCamera("Microsoft_LifeCam_HD-3000");
 
-  
+
   private final AutoCommand autoCommand = new AutoCommand(drivetrain, intake, elevator);
   private final AutoCommandCamera autoCommandCamera = new AutoCommandCamera(drivetrain, intake, elevator, camera) ;
 
@@ -72,12 +73,12 @@ public class RobotContainer {
     .whileActiveOnce(new IntakeCommand(intake, 0.6));
     new JoystickButton(copilot, XboxController.Button.kB.value)
     .whileActiveOnce(new IntakeCommand(intake, -0.49));
-    new JoystickButton(copilot, XboxController.Button.kX.value)
-    .whenPressed(new ElevatorBottom(elevator));
+    // new JoystickButton(copilot, XboxController.Button.kX.value)
+    // .whenPressed(new ElevatorBottom(elevator));
     new JoystickButton(copilot, XboxController.Button.kY.value)
     .whenPressed(new ElevatorTop(elevator));
-    // new JoystickButton(copilot, XboxController.Button.kRightBumper.value)
-    // .whenPressed(new Eject(intake, 7, -0.5));
+    new JoystickButton(copilot, XboxController.Button.kRightBumper.value)
+    .whenPressed(new Eject(intake, 8, -0.5));
     // new JoystickButton(copilot, XboxController.Button.kLeftBumper.value)
     // .whenPressed(new MoveABit(drivetrain, 10, -0.2));
     // new JoystickButton(pilot, XboxController.Button.kRightBumper.value)
@@ -95,6 +96,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
-    return autoCommand; 
+    return new AutoCommand(drivetrain, intake, elevator);
+    // return autoCommand;
+    // return new 
+    // return new Eject1PerZone(intake, elevator, drivetrain);
   }
 }
