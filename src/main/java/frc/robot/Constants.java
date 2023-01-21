@@ -27,11 +27,12 @@ public final class Constants {
 
     public static final class ElevatorConstants{
         public static final int FALCON = 6;
-        public static final double KP = 0.2;
+        public static final double KP = 0.0086182;
         public static final double KI = 0.0;
-        public static final double KD = 0.0;
-        public static final double CRUISE_VELOCITY = 15000;
-        public static final double MAX_ACCEL = 6000;
+        public static final double KD = 0.48225;
+        public static final double CRUISE_VELOCITY = 20_000;
+        public static final double MAX_ACCEL = 45_000;
+        public static final double ENTODER_KICKS_PER_INCH = 8192;
     }
 
     public static final double ENCODER_TICKS_PER_METER = 49866;

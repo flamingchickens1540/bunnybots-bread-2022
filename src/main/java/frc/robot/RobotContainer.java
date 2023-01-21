@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.elevator.*;
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -21,11 +23,6 @@ import frc.robot.commands.drivetrain.AutoCommandCamera;
 import frc.robot.commands.drivetrain.MoveABit;
 import frc.robot.commands.drivetrain.Drivetrain;
 import frc.robot.commands.drivetrain.TankDrive;
-import frc.robot.commands.elevator.Eject1PerZone;
-import frc.robot.commands.elevator.Elevator;
-import frc.robot.commands.elevator.ElevatorBottom;
-import frc.robot.commands.elevator.ElevatorCommand;
-import frc.robot.commands.elevator.ElevatorTop;
 import frc.robot.commands.intake.Eject;
 import frc.robot.commands.intake.Intake;
 import frc.robot.commands.intake.IntakeCommand;
@@ -57,8 +54,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
-    drivetrain.setDefaultCommand(new TankDrive(pilot, drivetrain, elevator));
-    elevator.setDefaultCommand(new ElevatorCommand(copilot, elevator));
+    //drivetrain.setDefaultCommand(new TankDrive(pilot, drivetrain, elevator));
+    elevator.setDefaultCommand(new ElevatorCommand(pilot, elevator));
     configureButtonBindings();
   }
 
@@ -69,16 +66,22 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(copilot, XboxController.Button.kA.value)
-    .whileActiveOnce(new IntakeCommand(intake, 0.6));
-    new JoystickButton(copilot, XboxController.Button.kB.value)
-    .whileActiveOnce(new IntakeCommand(intake, -0.49));
-    // new JoystickButton(copilot, XboxController.Button.kX.value)
-    // .whenPressed(new ElevatorBottom(elevator));
-    new JoystickButton(copilot, XboxController.Button.kY.value)
-    .whenPressed(new ElevatorTop(elevator));
-    new JoystickButton(copilot, XboxController.Button.kRightBumper.value)
-    .whenPressed(new Eject(intake, 8, -0.5));
+//    new JoystickButton(copilot, XboxController.Button.kA.value)
+//            .whileActiveOnce(new IntakeCommand(intake, 0.6));
+//    new JoystickButton(copilot, XboxController.Button.kB.value)
+//            .whileActiveOnce(new IntakeCommand(intake, -0.49));
+     new JoystickButton(pilot, XboxController.Button.kA.value)
+     .whenPressed(new ElevatorBottom(elevator));
+//    new JoystickButton(copilot, XboxController.Button.kY.value)
+//            .whenPressed(new ElevatorTop(elevator));
+//    new JoystickButton(copilot, XboxController.Button.kRightBumper.value)
+//            .whenPressed(new Eject(intake, 8, -0.5));
+    new JoystickButton(pilot, XboxController.Button.kLeftBumper.value)
+            .whileActiveContinuous(new ElevatorPID(elevator, 150_000, false));
+    new JoystickButton(pilot, XboxController.Button.kRightBumper.value)
+            .whileActiveContinuous(new ElevatorPID(elevator, 250_000, false));
+    new JoystickButton(pilot, XboxController.Button.kX.value)
+            .whileActiveContinuous(new ElevatorPID(elevator, 250_000, true));
     // new JoystickButton(copilot, XboxController.Button.kLeftBumper.value)
     // .whenPressed(new MoveABit(drivetrain, 10, -0.2));
     // new JoystickButton(pilot, XboxController.Button.kRightBumper.value)
@@ -96,9 +99,10 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
-    return new AutoCommand(drivetrain, intake, elevator);
+//    return new AutoCommand(drivetrain, intake, elevator);
     // return autoCommand;
     // return new 
     // return new Eject1PerZone(intake, elevator, drivetrain);
+    return null;
   }
 }

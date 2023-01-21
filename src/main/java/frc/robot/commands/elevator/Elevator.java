@@ -20,8 +20,12 @@ public class Elevator extends SubsystemBase{
         elevatorMotor.config_kP(0, Constants.ElevatorConstants.KP);
         elevatorMotor.config_kI(0, Constants.ElevatorConstants.KI);
         elevatorMotor.config_kD(0, Constants.ElevatorConstants.KD);
+        SmartDashboard.putNumber("bread/elevator/kP", Constants.ElevatorConstants.KP);
+        SmartDashboard.putNumber("bread/elevator/kI", Constants.ElevatorConstants.KI);
+        SmartDashboard.putNumber("bread/elevator/kD", Constants.ElevatorConstants.KD);
         elevatorMotor.configMotionCruiseVelocity(Constants.ElevatorConstants.CRUISE_VELOCITY);
         elevatorMotor.configMotionAcceleration(Constants.ElevatorConstants.MAX_ACCEL);
+        //elevatorMotor.configMotionSCurveStrength(0);
         // elevatorMotor
 
     }
@@ -40,6 +44,7 @@ public class Elevator extends SubsystemBase{
     }
 
     public void setPosition(double pos) {
+        System.out.println("hi");
         elevatorMotor.set(ControlMode.Position, pos);
     }
 
@@ -50,14 +55,17 @@ public class Elevator extends SubsystemBase{
     @Override
     public void periodic() {
         // System.out.println(elevatorMotor.getSelectedSensorPosition());
-        if(elevatorMotor.isFwdLimitSwitchClosed() == 1){
-            elevatorMotor.setSelectedSensorPosition(352000);
-        }
-        else if(elevatorMotor.isRevLimitSwitchClosed() == 1){
+        if(bottomLimitHit()){
             elevatorMotor.setSelectedSensorPosition(0);
         }
+        else if(topLimitHit()){
+            elevatorMotor.setSelectedSensorPosition(352_000);
+        }
         SmartDashboard.putNumber("bread/elevator/position", elevatorMotor.getSelectedSensorPosition());
-        System.out.println(bottomLimitHit());
+//        if (bottomLimitHit()) System.out.println("bottom limit hit");
+        elevatorMotor.config_kP(0, SmartDashboard.getNumber("bread/elevator/kP", Constants.ElevatorConstants.KP));
+        elevatorMotor.config_kI(0, SmartDashboard.getNumber("bread/elevator/kI", Constants.ElevatorConstants.KI));
+        elevatorMotor.config_kD(0, SmartDashboard.getNumber("bread/elevator/kD", Constants.ElevatorConstants.KD));
     }
 
     public double getPosition(){
